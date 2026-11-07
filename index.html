@@ -1,21 +1,47 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MCQ Exam</title>
-<style>:root{--bg:#f6f7fb;--c:#fff;--tx:#1b1f2a;--m:#6b7280;--ac:#4f46e5;--bad:#dc2626;--bd:#e5e7eb}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1117;--c:#181b24;--tx:#eef0f6;--m:#9aa1b2;--ac:#818cf8;--bad:#f87171;--bd:#2a2e3b}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
-main{max-width:720px;margin:auto;padding:20px 16px 40px}h1{font-size:1.5rem;margin:0 0 12px}
-.card{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
-label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
-input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 10px}
-button{font:inherit;cursor:pointer;color:var(--tx)}
-.pri{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:600;margin-top:12px}.pri:disabled{opacity:.5}
-.gh{background:none;border:1px solid var(--bd);border-radius:10px;padding:10px 16px;margin:12px 0 0 6px}
-.opt{display:block;width:100%;text-align:left;background:none;border:1.5px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:8px}.opt.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
-.h{color:var(--m);font-size:.88rem}.err{color:var(--bad)}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.lk{background:none;border:0;color:var(--ac);padding:0;font-size:.88rem}.lk.d{color:var(--bad)}
-table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{text-align:left;padding:8px 6px;border-top:1px solid var(--bd)}th{border:0;color:var(--m)}.w{overflow-x:auto}.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.qi{border-top:1px solid var(--bd);padding:10px 0}.qi small{display:block;color:var(--m)}
-nav{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}nav button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--c);border-radius:10px;white-space:nowrap}nav .on{background:var(--ac);color:#fff;border-color:var(--ac)}</style></head><body><main><h1 id="ti">MCQ Exam</h1><div id="v">Loading…</div></main>
-<script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f1f3f2;--surf:#fff;--ink:#12201c;--mut:#5c6b66;--ac:#0b6b57;--onac:#fff;--act:#ddefe9;--ln:#d5dbd8;--bad:#b3261e;--ser:"Source Serif 4",Georgia,serif;--sans:"Public Sans",system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root{--paper:#0e1513;--surf:#151e1b;--ink:#e7efec;--mut:#93a39d;--ac:#4dc3a5;--onac:#08211b;--act:#18332c;--ln:#27332f;--bad:#f2867f}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--sans)}
+p{margin:0}:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.bar{background:var(--surf);border-bottom:1px solid var(--ln)}
+.bar>div{max-width:760px;margin:auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap}
+.brand{font:600 1.2rem/1.2 var(--ser)}
+main{max-width:760px;margin:auto;padding:30px 20px 110px}
+.bar>.wide,main.wide{max-width:1040px}
+h2{font:600 1.55rem/1.25 var(--ser);margin:0 0 6px}
+.mut{color:var(--mut)}.sm{font-size:.875rem}
+.err{color:var(--bad);font-size:.9rem;min-height:1.4em;margin:10px 0}
+label{display:block;font-weight:600;font-size:.875rem;margin:20px 0 6px}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--surf);border:1px solid var(--ln);border-radius:6px;padding:11px 12px}
+textarea{min-height:90px}input:focus,textarea:focus,select:focus{outline:2px solid var(--ac);outline-offset:0;border-color:var(--ac)}
+.btn{font:600 .95rem var(--sans);background:var(--ac);color:var(--onac);border:0;border-radius:6px;padding:12px 22px;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}.btn.ghost{background:none;color:var(--ink);border:1px solid var(--ln)}
+.lnk{background:none;border:0;padding:0;color:var(--ac);font:500 .875rem var(--sans);cursor:pointer;text-decoration:underline;text-underline-offset:3px}.lnk.d{color:var(--bad)}
+.rows>*{padding:16px 0;border-top:1px solid var(--ln)}.rows>*:last-child{border-bottom:1px solid var(--ln)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.note{border-left:3px solid var(--ac);background:var(--act);padding:12px 14px;margin-bottom:24px;border-radius:0 6px 6px 0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px;margin:14px 0 28px}
+.tiles button{height:40px;border:1px solid var(--ln);background:var(--surf);border-radius:6px;font:500 .85rem var(--sans);color:var(--ink);cursor:pointer}
+.tiles .a{background:var(--act);border-color:var(--ac)}.tiles .c{outline:2px solid var(--ink);outline-offset:1px}
+.q{font:500 1.35rem/1.5 var(--ser);margin:0 0 22px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surf);border:1px solid var(--ln);border-radius:6px;padding:13px 14px;margin-bottom:10px;color:var(--ink);font:inherit;cursor:pointer}
+.opt i{flex:none;width:30px;height:30px;border:1.5px solid var(--mut);border-radius:50%;display:grid;place-items:center;font:600 .8rem var(--sans);font-style:normal;color:var(--mut)}
+.opt.s{border-color:var(--ac);background:var(--act)}.opt.s i{background:var(--ac);border-color:var(--ac);color:var(--onac)}
+.dock{position:fixed;left:0;right:0;bottom:0;background:var(--surf);border-top:1px solid var(--ln)}
+.dock>div{max-width:760px;margin:auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.split{display:grid;grid-template-columns:250px 1fr;gap:40px}@media(max-width:760px){.split{grid-template-columns:1fr;gap:26px}}
+.sl button{display:block;width:100%;text-align:left;background:none;border:0;border-left:3px solid transparent;padding:10px 12px;font:inherit;color:var(--ink);cursor:pointer}
+.sl .on{border-left-color:var(--ac);background:var(--act);font-weight:600}
+.tabs{display:flex;gap:22px}.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:6px 0;font:500 .95rem var(--sans);color:var(--mut);cursor:pointer}.tabs .on{color:var(--ink);border-bottom-color:var(--ac)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th{font-weight:600;color:var(--mut);text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--ln)}td{padding:11px 12px 11px 0;border-bottom:1px solid var(--ln);vertical-align:top}.w{overflow-x:auto}
+details{border-top:1px solid var(--ln);padding:16px 0}summary{font-weight:600;cursor:pointer}
+.qi small{display:block}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body><header class="bar"><div><span class="brand" id="ti">Exam</span><span class="sm mut" id="who"></span></div></header><main id="v">Loading…</main><script>
 const API_URL="https://script.google.com/macros/s/AKfycbyC6-49hyBwOXNPPcqFkjSgOyiUHlYNw_B4uHjVyKsiQwrcJoP0uJw5q53_wCbsC3-8hA/exec";
 const $=i=>document.getElementById(i),L="ABCDEF";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -23,41 +49,49 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 let X,P=null,done=[],ex=null,msg="",ok="";
 async function api(action,d){const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,...d})});const j=await r.json();if(!j.ok)throw new Error(j.error);return j.data}
 async function init(){
- if(API_URL.startsWith("PASTE")){$("v").innerHTML='<div class="card">This site isn’t connected yet. Add your Web App URL to API_URL in this file.</div>';return}
+ if(API_URL.startsWith("PASTE")){$("v").innerHTML='<p class="mut">This site isn’t connected yet. Add your Web App URL to API_URL in this file.</p>';return}
  try{X=await api("getExam");$("ti").textContent=X.title;document.title=X.title;
   try{P=JSON.parse(localStorage.getItem("mcq_p")||"null")}catch(e){}
   if(P){const r=await api("status",P);if(r.exists)done=r.completed;else{P=null;localStorage.removeItem("mcq_p")}}
- }catch(e){$("v").innerHTML='<div class="card err">Could not load the exam: '+esc(e.message)+'</div>';return}
+ }catch(e){$("v").innerHTML='<p class="err">Could not load the exam: '+esc(e.message)+'. Check your connection and reload the page.</p>';return}
  render();
 }
 function render(){
+ $("who").innerHTML=P?(ex?esc(P.name):`${esc(P.name)} · <button class="lnk" onclick="logout()">Not you?</button>`):"";
  const v=$("v");
- if(!P)return v.innerHTML=`<div class="card"><b>Participant details</b><p class="h">Fill in your details to continue.</p><label>Full name</label><input id="nm" placeholder="First name Last name"><div class="g2"><div><label>Age</label><input id="ag" type="number" min="5" max="100"></div><div><label>Branch</label><input id="br" placeholder="e.g. CSE"></div></div><button class="pri" id="go" onclick="reg()">Continue</button><p class="err" id="er"></p></div>`;
+ if(!P)return v.innerHTML=`<h2>Candidate details</h2><p class="mut">Enter your details to see the exams open to you.</p>
+ <label for="nm">Full name</label><input id="nm" autocomplete="name" placeholder="First name Last name">
+ <div class="g2"><div><label for="ag">Age</label><input id="ag" type="number" inputmode="numeric" min="5" max="100"></div><div><label for="br">Branch</label><input id="br" placeholder="e.g. CSE"></div></div>
+ <p class="err" id="er"></p><button class="btn" id="go" onclick="reg()">Continue</button>`;
  if(ex)return examView();
  const av=X.sets.filter(s=>s.count);
- v.innerHTML=`<div class="card row"><div><b>${esc(P.name)}</b><div class="h">Age ${esc(P.age)} · ${esc(P.branch)}</div></div><button class="lk" onclick="logout()">Not you?</button></div>${ok?`<div class="card">✅ ${esc(ok)}</div>`:""}`+(av.length?av.map(s=>`<div class="card row"><div><b>${esc(s.title)}</b><div class="h">${s.count} questions${done.includes(s.id)?" · Submitted":""}</div></div>${done.includes(s.id)?'<span class="h">Completed</span>':`<button class="pri" style="margin:0" onclick="begin('${s.id}')">Start</button>`}</div>`).join(""):'<div class="card">No exam sets are available yet. Please check back later.</div>')+`<p class="err">${esc(msg)}</p>`;
+ v.innerHTML=(ok?`<p class="note">Your answers for ${esc(ok)} were submitted.</p>`:"")+`<h2>Choose an exam</h2><p class="mut" style="margin-bottom:20px">Each exam can be taken once.</p>`+(av.length?`<div class="rows">${av.map(s=>`<div class="row"><div><b>${esc(s.title)}</b><div class="mut sm">${s.count} questions</div></div>${done.includes(s.id)?'<span class="mut sm">Submitted</span>':`<button class="btn" onclick="begin('${s.id}')">Start</button>`}</div>`).join("")}</div>`:'<p class="mut">No exams are open yet. Please check back later.</p>')+`<p class="err">${esc(msg)}</p>`;
 }
 function er(m){$("er").textContent=m;$("go").disabled=false}
 async function reg(){
  const name=$("nm").value.trim().replace(/\s+/g," "),age=Math.round(+$("ag").value),branch=$("br").value.trim();
- if(name.split(" ").filter(w=>w.length>1).length<2)return er("Please enter your full name (first and last name).");
- if(!(age>=5&&age<=100))return er("Please enter a valid age.");
- if(!branch)return er("Please enter your branch.");
+ if(name.split(" ").filter(w=>w.length>1).length<2)return er("Enter your full name, including first and last name.");
+ if(!(age>=5&&age<=100))return er("Enter a valid age.");
+ if(!branch)return er("Enter your branch.");
  $("go").disabled=true;
  try{const r=await api("register",{name,age,branch});P={name,age,branch};done=r.completed;localStorage.setItem("mcq_p",JSON.stringify(P));render()}catch(e){er(e.message)}
 }
 function logout(){localStorage.removeItem("mcq_p");P=null;done=[];ok="";render()}
-function begin(id){ok="";msg="";ex={sid:id,i:0,ans:{},qs:shuffle(X.questions.filter(q=>q.setId===id).map(q=>({...q,o:shuffle(q.o.map((t,i)=>({t,i})))})))};render()}
+function begin(id){ok="";msg="";ex={sid:id,i:0,ans:{},qs:shuffle(X.questions.filter(q=>q.setId===id).map(q=>({...q,o:shuffle(q.o.map((t,i)=>({t,i})))})))};render();scrollTo(0,0)}
 function pick(id,i){ex.ans[id]=i;render()}
+function go(k){ex.i=k;render();scrollTo(0,0)}
 function examView(){
- const q=ex.qs[ex.i],n=ex.qs.length,c=Object.keys(ex.ans).length;
- $("v").innerHTML=`<p class="h">${esc(X.sets.find(s=>s.id===ex.sid).title)} · Question ${ex.i+1} of ${n} · ${c}/${n} answered</p><div class="card"><p style="font-weight:600;font-size:1.1rem">${esc(q.q)}</p>${q.o.map((x,k)=>`<button class="opt${ex.ans[q.id]===x.i?" sel":""}" onclick="pick('${q.id}',${x.i})">${L[k]}. ${esc(x.t)}</button>`).join("")}${ex.i>0?'<button class="gh" style="margin-left:0" onclick="ex.i--;render()">Previous</button>':""}${ex.i<n-1?'<button class="pri" style="margin-left:6px" onclick="ex.i++;render()">Next</button>':'<button class="pri" style="margin-left:6px" id="sb" onclick="submit()">Submit</button>'}<p class="err">${esc(msg)}</p></div>`;
+ const q=ex.qs[ex.i],n=ex.qs.length,c=Object.keys(ex.ans).length,last=ex.i===n-1;
+ $("v").innerHTML=`<p class="mut sm">${esc(X.sets.find(s=>s.id===ex.sid).title)}</p><h2>Question ${ex.i+1} of ${n}</h2>
+ <div class="tiles">${ex.qs.map((x,k)=>`<button class="${ex.ans[x.id]!==undefined?"a ":""}${k===ex.i?"c":""}" onclick="go(${k})" aria-label="Question ${k+1}">${k+1}</button>`).join("")}</div>
+ <p class="q">${esc(q.q)}</p>${q.o.map((x,k)=>`<button class="opt${ex.ans[q.id]===x.i?" s":""}" onclick="pick('${q.id}',${x.i})"><i>${L[k]}</i><span>${esc(x.t)}</span></button>`).join("")}<p class="err">${esc(msg)}</p>
+ <div class="dock"><div><button class="btn ghost" ${ex.i?"":"disabled"} onclick="go(ex.i-1)">Previous</button><span class="mut sm">${c} of ${n} answered</span>${last?'<button class="btn" id="sb" onclick="submit()">Submit answers</button>':'<button class="btn" onclick="go(ex.i+1)">Next</button>'}</div></div>`;
 }
 async function submit(){
  const n=ex.qs.length,u=n-Object.keys(ex.ans).length;
- if(u&&!confirm(u+" question(s) unanswered. Submit anyway?"))return;
- $("sb").disabled=true;
- try{await api("submit",{...P,setId:ex.sid,answers:ex.ans});done.push(ex.sid);ok="Your answers have been submitted.";ex=null;msg="";render()}
+ if(u&&!confirm(u+" question(s) are unanswered. Submit anyway?"))return;
+ $("sb").disabled=true;const t=X.sets.find(s=>s.id===ex.sid).title;
+ try{await api("submit",{...P,setId:ex.sid,answers:ex.ans});done.push(ex.sid);ok=t;ex=null;msg="";render();scrollTo(0,0)}
  catch(e){msg=e.message;if(/already submitted/.test(e.message)){done.push(ex.sid);ex=null}render()}
 }
 addEventListener("beforeunload",e=>{if(ex){e.preventDefault();e.returnValue=""}});
