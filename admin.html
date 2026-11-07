@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>MCQ Admin</title>
+<style>:root{--bg:#f6f7fb;--c:#fff;--tx:#1b1f2a;--m:#6b7280;--ac:#4f46e5;--bad:#dc2626;--bd:#e5e7eb}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1117;--c:#181b24;--tx:#eef0f6;--m:#9aa1b2;--ac:#818cf8;--bad:#f87171;--bd:#2a2e3b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
+main{max-width:720px;margin:auto;padding:20px 16px 40px}h1{font-size:1.5rem;margin:0 0 12px}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 10px}
+button{font:inherit;cursor:pointer;color:var(--tx)}
+.pri{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:600;margin-top:12px}.pri:disabled{opacity:.5}
+.gh{background:none;border:1px solid var(--bd);border-radius:10px;padding:10px 16px;margin:12px 0 0 6px}
+.opt{display:block;width:100%;text-align:left;background:none;border:1.5px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:8px}.opt.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.h{color:var(--m);font-size:.88rem}.err{color:var(--bad)}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lk{background:none;border:0;color:var(--ac);padding:0;font-size:.88rem}.lk.d{color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{text-align:left;padding:8px 6px;border-top:1px solid var(--bd)}th{border:0;color:var(--m)}.w{overflow-x:auto}.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qi{border-top:1px solid var(--bd);padding:10px 0}.qi small{display:block;color:var(--m)}
+nav{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}nav button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--c);border-radius:10px;white-space:nowrap}nav .on{background:var(--ac);color:#fff;border-color:var(--ac)}</style></head><body><main><h1>MCQ Admin</h1><nav id="nav"></nav><div id="v"></div></main>
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbyC6-49hyBwOXNPPcqFkjSgOyiUHlYNw_B4uHjVyKsiQwrcJoP0uJw5q53_wCbsC3-8hA/exec";
+const $=i=>document.getElementById(i),L="ABCDEF";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let pw=sessionStorage.getItem("pw")||"",D=null,tab="sets",sel="",ren="",vr=null;
+async function api(action,d){const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,password:pw,...d})});const j=await r.json();if(!j.ok)throw new Error(j.error);return j.data}
+async function load(){D=await api("adminGetAll");if(!D.sets.find(s=>s.id===sel))sel=D.sets.length?D.sets[0].id:""}
+async function act(a,d){try{await api(a,d);await load()}catch(e){alert(e.message)}render()}
+async function init(){if(API_URL.startsWith("PASTE")){$("v").innerHTML='<div class="card">Add your Web App URL to API_URL in this file first.</div>';return}
+ if(pw){try{await load()}catch(e){pw=""}}render()}
+async function login(){pw=$("pw").value;try{await load();sessionStorage.setItem("pw",pw);render()}catch(e){pw="";$("er").textContent=e.message}}
+function logout(){sessionStorage.removeItem("pw");pw="";D=null;render()}
+const sname=id=>(D.sets.find(s=>s.id===String(id))||{}).title||"(deleted set)";
+function render(){
+ const v=$("v"),n=$("nav");
+ if(!D){n.innerHTML="";return v.innerHTML='<div class="card"><b>Admin login</b><label>Password</label><input id="pw" type="password" onkeydown="if(event.key===\'Enter\')login()"><button class="pri" onclick="login()">Log in</button><p class="err" id="er"></p></div>'}
+ n.innerHTML=[["sets","Sets & questions"],["res","Results"],["set","Settings"]].map(([k,t])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';vr=null;render()">${t}</button>`).join("")+`<button onclick="act('adminGetAll',{})">Refresh</button><button onclick="logout()">Log out</button>`;
+ v.innerHTML=tab==="sets"?setsView():tab==="res"?resView():`<div class="card"><b>Exam title</b><input id="tt" value="${esc(D.title)}"><button class="pri" onclick="act('setTitle',{title:$('tt').value})">Save</button></div>`;
+}
+function setsView(){
+ const qs=s=>D.questions.filter(q=>q.setId===s);
+ return `<div class="card"><b>Create a set</b><div class="g2"><input id="sn" placeholder="e.g. Set A"><div><button class="pri" style="margin:0" onclick="newSet()">Create</button></div></div></div>`+
+ (D.sets.length?`<div class="card"><label style="margin-top:0">Add questions to</label><select onchange="sel=this.value">${D.sets.map(s=>`<option value="${s.id}" ${s.id===sel?"selected":""}>${esc(s.title)}</option>`).join("")}</select>
+ <label>Question</label><textarea id="q"></textarea><label>Options (2 to 4)</label>${[0,1,2,3].map(i=>`<input id="o${i}" placeholder="Option ${L[i]}" style="margin-bottom:6px">`).join("")}<button class="pri" onclick="addQ()">Add question</button>
+ <label>Or paste many (blank line between questions, one A) B) C) D) option per line)</label><textarea id="bulk" style="min-height:120px"></textarea><button class="pri" onclick="bulk()">Import</button></div>`:"")+
+ D.sets.map(s=>`<div class="card"><div class="row">${ren===s.id?`<input id="rn" value="${esc(s.title)}"><span style="white-space:nowrap"><button class="lk" onclick="act('renameSet',{id:'${s.id}',title:$('rn').value});ren=''">Save</button> · <button class="lk" onclick="ren='';render()">Cancel</button></span>`:`<b>${esc(s.title)} <span class="h">(${qs(s.id).length} questions)</span></b><span style="white-space:nowrap"><button class="lk" onclick="ren='${s.id}';render()">Rename</button> · <button class="lk d" onclick="delSet('${s.id}')">Delete set</button></span>`}</div>${qs(s.id).map((q,i)=>`<div class="qi"><b>${i+1}. ${esc(q.q)}</b><small>${q.o.map((t,k)=>L[k]+") "+esc(t)).join(" · ")}</small><button class="lk d" onclick="delQ('${q.id}')">Delete</button></div>`).join("")}</div>`).join("");
+}
+function newSet(){const t=$("sn").value.trim();if(t)act("addSet",{title:t})}
+function addQ(){const q=$("q").value.trim(),o=[0,1,2,3].map(i=>$("o"+i).value.trim()).filter(Boolean);if(!q||o.length<2)return alert("Enter a question and at least two options.");act("addQuestions",{setId:sel,items:[{q,o}]})}
+function parse(t){return t.split(/\n\s*\n/).map(b=>{let q="",o=[];b.split("\n").map(s=>s.trim()).filter(Boolean).forEach(l=>{const m=l.match(/^\(?([A-F])[\).:]\s*(.+)/i);if(m&&L.indexOf(m[1].toUpperCase())===o.length)o.push(m[2]);else if(!o.length)q+=(q?" ":"")+l.replace(/^(?:q(?:uestion)?\s*)?\d*\s*[\.\):\-]\s*/i,"")});return{q,o}}).filter(x=>x.q&&x.o.length>=2)}
+function bulk(){const it=parse($("bulk").value);if(!it.length)return alert("No valid questions found. Put each option on its own line starting with A), B)…");act("addQuestions",{setId:sel,items:it})}
+function delSet(id){if(confirm("Delete this set and all its questions?"))act("deleteSet",{id})}
+function delQ(id){if(confirm("Delete this question?"))act("deleteQuestion",{id})}
+function retake(key,setId){if(confirm("Clear this result and allow another attempt at this set?"))act("allowRetake",{key,setId})}
+function resView(){
+ const rows=[];D.participants.forEach(p=>{const rs=D.responses.filter(r=>r.key===p.key);if(rs.length)rs.forEach(r=>rows.push({p,r}));else rows.push({p,r:null})});
+ return (vr?ansCard():"")+`<div class="card"><div class="w">${rows.length?`<table><tr><th>Name</th><th>Age</th><th>Branch</th><th>Set</th><th>Submitted</th><th></th></tr>${rows.map(({p,r})=>`<tr><td>${esc(p.name)}</td><td>${esc(p.age)}</td><td>${esc(p.branch)}</td><td>${r?esc(sname(r.setId)):'<span class="h">not attempted</span>'}</td><td>${r?new Date(r.submitted).toLocaleString():""}</td><td>${r?`<button class="lk" onclick="vr={key:'${r.key}',setId:'${r.setId}'};render()">View answers</button> · <button class="lk d" onclick="retake('${r.key}','${r.setId}')">Allow retake</button>`:`<button class="lk d" onclick="act('removeParticipant',{key:'${p.key}'})">Remove</button>`}</td></tr>`).join("")}</table>`:'<span class="h">No participants yet.</span>'}</div>${rows.length?'<button class="gh" style="margin-left:0" onclick="csv()">Download CSV</button>':""}</div>`;
+}
+function ansCard(){const r=D.responses.find(x=>x.key===vr.key&&x.setId===vr.setId);if(!r)return"";const p=D.participants.find(x=>x.key===r.key)||{};
+ return `<div class="card"><div class="row"><b>${esc(p.name||"")} · ${esc(sname(r.setId))}</b><button class="lk" onclick="vr=null;render()">Close</button></div>${D.questions.filter(q=>q.setId===r.setId).map((q,i)=>{const c=r.answers[q.id];return `<div class="qi"><b>${i+1}. ${esc(q.q)}</b><small>Answer: ${c==null?"not answered":esc(L[c]+") "+(q.o[c]||""))}</small></div>`}).join("")}</div>`}
+function csv(){const q=s=>'"'+String(s).replace(/"/g,'""')+'"',rows=[["Name","Age","Branch","Set","Question no","Question","Answer","Submitted"]];
+ D.participants.forEach(p=>{const rs=D.responses.filter(r=>r.key===p.key);if(!rs.length)rows.push([p.name,p.age,p.branch,"","","","",""]);rs.forEach(r=>D.questions.filter(x=>x.setId===r.setId).forEach((x,i)=>{const c=r.answers[x.id];rows.push([p.name,p.age,p.branch,sname(r.setId),i+1,x.q,c==null?"":L[c]+") "+x.o[c],new Date(r.submitted).toISOString()])}))});
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(",")).join("\n")],{type:"text/csv"}));a.download="results.csv";a.click()}
+init();
+</script></body></html>

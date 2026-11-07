@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MCQ Exam</title>
+<style>:root{--bg:#f6f7fb;--c:#fff;--tx:#1b1f2a;--m:#6b7280;--ac:#4f46e5;--bad:#dc2626;--bd:#e5e7eb}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1117;--c:#181b24;--tx:#eef0f6;--m:#9aa1b2;--ac:#818cf8;--bad:#f87171;--bd:#2a2e3b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
+main{max-width:720px;margin:auto;padding:20px 16px 40px}h1{font-size:1.5rem;margin:0 0 12px}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 10px}
+button{font:inherit;cursor:pointer;color:var(--tx)}
+.pri{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:600;margin-top:12px}.pri:disabled{opacity:.5}
+.gh{background:none;border:1px solid var(--bd);border-radius:10px;padding:10px 16px;margin:12px 0 0 6px}
+.opt{display:block;width:100%;text-align:left;background:none;border:1.5px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:8px}.opt.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.h{color:var(--m);font-size:.88rem}.err{color:var(--bad)}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lk{background:none;border:0;color:var(--ac);padding:0;font-size:.88rem}.lk.d{color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{text-align:left;padding:8px 6px;border-top:1px solid var(--bd)}th{border:0;color:var(--m)}.w{overflow-x:auto}.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qi{border-top:1px solid var(--bd);padding:10px 0}.qi small{display:block;color:var(--m)}
+nav{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}nav button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--c);border-radius:10px;white-space:nowrap}nav .on{background:var(--ac);color:#fff;border-color:var(--ac)}</style></head><body><main><h1 id="ti">MCQ Exam</h1><div id="v">Loading…</div></main>
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbyC6-49hyBwOXNPPcqFkjSgOyiUHlYNw_B4uHjVyKsiQwrcJoP0uJw5q53_wCbsC3-8hA/exec";
+const $=i=>document.getElementById(i),L="ABCDEF";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let X,P=null,done=[],ex=null,msg="",ok="";
+async function api(action,d){const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,...d})});const j=await r.json();if(!j.ok)throw new Error(j.error);return j.data}
+async function init(){
+ if(API_URL.startsWith("PASTE")){$("v").innerHTML='<div class="card">This site isn’t connected yet. Add your Web App URL to API_URL in this file.</div>';return}
+ try{X=await api("getExam");$("ti").textContent=X.title;document.title=X.title;
+  try{P=JSON.parse(localStorage.getItem("mcq_p")||"null")}catch(e){}
+  if(P){const r=await api("register",P);done=r.completed}
+ }catch(e){$("v").innerHTML='<div class="card err">Could not load the exam: '+esc(e.message)+'</div>';return}
+ render();
+}
+function render(){
+ const v=$("v");
+ if(!P)return v.innerHTML=`<div class="card"><b>Participant details</b><p class="h">Fill in your details to continue.</p><label>Full name</label><input id="nm" placeholder="First name Last name"><div class="g2"><div><label>Age</label><input id="ag" type="number" min="5" max="100"></div><div><label>Branch</label><input id="br" placeholder="e.g. CSE"></div></div><button class="pri" id="go" onclick="reg()">Continue</button><p class="err" id="er"></p></div>`;
+ if(ex)return examView();
+ const av=X.sets.filter(s=>s.count);
+ v.innerHTML=`<div class="card row"><div><b>${esc(P.name)}</b><div class="h">Age ${esc(P.age)} · ${esc(P.branch)}</div></div><button class="lk" onclick="logout()">Not you?</button></div>${ok?`<div class="card">✅ ${esc(ok)}</div>`:""}`+(av.length?av.map(s=>`<div class="card row"><div><b>${esc(s.title)}</b><div class="h">${s.count} questions${done.includes(s.id)?" · Submitted":""}</div></div>${done.includes(s.id)?'<span class="h">Completed</span>':`<button class="pri" style="margin:0" onclick="begin('${s.id}')">Start</button>`}</div>`).join(""):'<div class="card">No exam sets are available yet. Please check back later.</div>')+`<p class="err">${esc(msg)}</p>`;
+}
+function er(m){$("er").textContent=m;$("go").disabled=false}
+async function reg(){
+ const name=$("nm").value.trim().replace(/\s+/g," "),age=Math.round(+$("ag").value),branch=$("br").value.trim();
+ if(name.split(" ").filter(w=>w.length>1).length<2)return er("Please enter your full name (first and last name).");
+ if(!(age>=5&&age<=100))return er("Please enter a valid age.");
+ if(!branch)return er("Please enter your branch.");
+ $("go").disabled=true;
+ try{const r=await api("register",{name,age,branch});P={name,age,branch};done=r.completed;localStorage.setItem("mcq_p",JSON.stringify(P));render()}catch(e){er(e.message)}
+}
+function logout(){localStorage.removeItem("mcq_p");P=null;done=[];ok="";render()}
+function begin(id){ok="";msg="";ex={sid:id,i:0,ans:{},qs:shuffle(X.questions.filter(q=>q.setId===id).map(q=>({...q,o:shuffle(q.o.map((t,i)=>({t,i})))})))};render()}
+function pick(id,i){ex.ans[id]=i;render()}
+function examView(){
+ const q=ex.qs[ex.i],n=ex.qs.length,c=Object.keys(ex.ans).length;
+ $("v").innerHTML=`<p class="h">${esc(X.sets.find(s=>s.id===ex.sid).title)} · Question ${ex.i+1} of ${n} · ${c}/${n} answered</p><div class="card"><p style="font-weight:600;font-size:1.1rem">${esc(q.q)}</p>${q.o.map((x,k)=>`<button class="opt${ex.ans[q.id]===x.i?" sel":""}" onclick="pick('${q.id}',${x.i})">${L[k]}. ${esc(x.t)}</button>`).join("")}${ex.i>0?'<button class="gh" style="margin-left:0" onclick="ex.i--;render()">Previous</button>':""}${ex.i<n-1?'<button class="pri" style="margin-left:6px" onclick="ex.i++;render()">Next</button>':'<button class="pri" style="margin-left:6px" id="sb" onclick="submit()">Submit</button>'}<p class="err">${esc(msg)}</p></div>`;
+}
+async function submit(){
+ const n=ex.qs.length,u=n-Object.keys(ex.ans).length;
+ if(u&&!confirm(u+" question(s) unanswered. Submit anyway?"))return;
+ $("sb").disabled=true;
+ try{await api("submit",{...P,setId:ex.sid,answers:ex.ans});done.push(ex.sid);ok="Your answers have been submitted.";ex=null;msg="";render()}
+ catch(e){msg=e.message;if(/already submitted/.test(e.message)){done.push(ex.sid);ex=null}render()}
+}
+addEventListener("beforeunload",e=>{if(ex){e.preventDefault();e.returnValue=""}});
+init();
+</script></body></html>
