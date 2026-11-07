@@ -26,7 +26,7 @@ async function init(){
  if(API_URL.startsWith("PASTE")){$("v").innerHTML='<div class="card">This site isn’t connected yet. Add your Web App URL to API_URL in this file.</div>';return}
  try{X=await api("getExam");$("ti").textContent=X.title;document.title=X.title;
   try{P=JSON.parse(localStorage.getItem("mcq_p")||"null")}catch(e){}
-  if(P){const r=await api("register",P);done=r.completed}
+  if(P){const r=await api("status",P);if(r.exists)done=r.completed;else{P=null;localStorage.removeItem("mcq_p")}}
  }catch(e){$("v").innerHTML='<div class="card err">Could not load the exam: '+esc(e.message)+'</div>';return}
  render();
 }
